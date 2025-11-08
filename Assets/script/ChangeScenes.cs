@@ -10,12 +10,11 @@ public class ChangeScenes : MonoBehaviour
     public float fadeDuration = 1f;
     public GameObject Illu;
 
-    private bool isTransitioning = false; // 중복 방지 플래그
-    private bool hasLoaded = false;       // 다음 씬 넘어간 후 입력 방지용
+    private bool isTransitioning = false; // 중복방지 
+    private bool hasLoaded = false; 
 
     void Start()
     {
-        // Panel은 유지, ChangeScenes는 다음 씬에서 파괴
         DontDestroyOnLoad(Panel.transform.root.gameObject);
     }
 
