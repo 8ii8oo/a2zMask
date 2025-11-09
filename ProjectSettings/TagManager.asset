@@ -6,6 +6,7 @@ TagManager:
   tags:
   - floor
   - Object
+  - Potal
   layers:
   - Default
   - TransparentFX

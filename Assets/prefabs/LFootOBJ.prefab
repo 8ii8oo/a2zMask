@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7818875912568702349}
   - component: {fileID: 5084609950688706810}
-  - component: {fileID: 841591868164185878}
+  - component: {fileID: 8483401328070616523}
   m_Layer: 0
-  m_Name: RFootOBJ
+  m_Name: LFootOBJ
   m_TagString: floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -79,7 +79,7 @@ SpriteRenderer:
   m_SortingOrder: 1
   m_Sprite: {fileID: -1524755187943188911, guid: bc94633a49be9044db8854bae215158d, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 23.19, y: 13.692204}
@@ -88,7 +88,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &841591868164185878
+--- !u!61 &8483401328070616523
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

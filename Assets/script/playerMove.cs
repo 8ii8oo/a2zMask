@@ -45,8 +45,6 @@ public class PlayerMove : MonoBehaviour
             rigid.linearVelocity = new Vector2(0, jumpPower);
             currentJumpCount++;
             isGround = false;
-            //rigid.velocity = Vector2.zero 점프 다른방법
-            //rigid.AddForce(Vector2.up * jumpPower, ForceMode2D.Impulse); 22
         }
     }
     void OnCollisionEnter2D(Collision2D collision) //점프 초기화
