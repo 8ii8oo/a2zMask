@@ -4,7 +4,7 @@ using System.Collections;
 using UnityEngine.UIElements;
 
 
-public class PotalScene : MonoBehaviour
+public class ScenePotal : MonoBehaviour
 {
     public string sceneName;
     public GameObject filter;
@@ -82,11 +82,11 @@ public class PotalScene : MonoBehaviour
             float currentSpeed = Mathf.Lerp(startSpeed, targetSpeed, t);
             float currentScale = Mathf.Lerp(startScale, targetScale, t);
 
-                if (filterRD != null)
-                {
-                    filterRD.material.SetFloat(speedPropName, currentSpeed);
-                    filterRD.material.SetFloat(scalePropName, currentScale);
-                }
+            if (filterRD != null)
+            {
+                filterRD.material.SetFloat(speedPropName, currentSpeed);
+                filterRD.material.SetFloat(scalePropName, currentScale);
+            }
 
             elapsedTime += Time.deltaTime;
             yield return null;
@@ -104,44 +104,53 @@ public class PotalScene : MonoBehaviour
 
     void OnSceneLoad(Scene scene, LoadSceneMode mode)
     {
-        StartCoroutine(RestoreEffect());
-    }
-    
-    IEnumerator RestoreEffect()
-    {
-
-        
-        if (filterRD == null) yield break;
-        filterRD.gameObject.SetActive(true);
-
-        float duration = 3f;
-        float elapsedTime = 0f;
-
-        float startSpeed = 3f;
-        float targetSpeed = 0f;
-        float startScale = 50f;
-        float targetScale = 0f;
-
-        while (elapsedTime < duration)
+        if (scene.name == "title")
         {
-            float t = elapsedTime / duration;
-            float currentSpeed = Mathf.Lerp(startSpeed, targetSpeed, t);
-            float currentScale = Mathf.Lerp(startScale, targetScale, t);
+            SceneManager.sceneLoaded -= OnSceneLoad;
+            Destroy(gameObject);
+            return;
+        }
 
-            if (filterRD != null)
+        isTransitioning = false;
+        StartCoroutine(RestoreEffect());
+
+
+        IEnumerator RestoreEffect()
+        {
+
+
+            if (filterRD == null) yield break;
+            filterRD.gameObject.SetActive(true);
+
+            float duration = 3f;
+            float elapsedTime = 0f;
+
+            float startSpeed = 3f;
+            float targetSpeed = 0f;
+            float startScale = 50f;
+            float targetScale = 0f;
+
+            while (elapsedTime < duration)
             {
-                filterRD.material.SetFloat(speedPropName, currentSpeed);
-                filterRD.material.SetFloat(scalePropName, currentScale);
+                float t = elapsedTime / duration;
+                float currentSpeed = Mathf.Lerp(startSpeed, targetSpeed, t);
+                float currentScale = Mathf.Lerp(startScale, targetScale, t);
+
+                if (filterRD != null)
+                {
+                    filterRD.material.SetFloat(speedPropName, currentSpeed);
+                    filterRD.material.SetFloat(scalePropName, currentScale);
+                }
+
+                elapsedTime += Time.deltaTime;
+                yield return null;
+
             }
 
-            elapsedTime += Time.deltaTime;
-            yield return null;
+            filterRD.material.SetFloat(speedPropName, targetSpeed);
+            filterRD.material.SetFloat(scalePropName, targetScale);
 
         }
-                
-                filterRD.material.SetFloat(speedPropName, targetSpeed);
-                filterRD.material.SetFloat(scalePropName, targetScale);
-        
-        }
     }
+}
 

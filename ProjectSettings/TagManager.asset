@@ -7,6 +7,7 @@ TagManager:
   - floor
   - Object
   - Potal
+  - Enemy
   layers:
   - Default
   - TransparentFX

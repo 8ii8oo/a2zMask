@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class ChangeScenes : MonoBehaviour
+public class SceneChange : MonoBehaviour
 {
     public string sceneName;
     public Image Panel;
@@ -15,6 +15,7 @@ public class ChangeScenes : MonoBehaviour
 
     void Start()
     {
+        Time.timeScale = 1f;
         DontDestroyOnLoad(Panel.transform.root.gameObject);
     }
 
@@ -65,7 +66,7 @@ public class ChangeScenes : MonoBehaviour
 
     void Update()
     {
-        if (!isTransitioning && !hasLoaded && Input.anyKeyDown)
+        if (!isTransitioning && !hasLoaded && Input.anyKeyDown )
         {
             StartCoroutine(FadeOutAndLoad());
         }

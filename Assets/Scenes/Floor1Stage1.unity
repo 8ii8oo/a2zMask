@@ -5781,9 +5781,13 @@ MonoBehaviour:
   jumpPower: 12
   currentJumpCount: 0
   isGround: 1
-  rigid: {fileID: 0}
+  dashPower: 24
+  dashTime: 0.2
+  dashingCooldown: 1
   mask: {fileID: 203936586}
-  health: 100
+  frictionMaterial: {fileID: 6200000, guid: 145ba35cfccf2ad4d936add58935498b, type: 2}
+  noFrictionMaterial: {fileID: 6200000, guid: 8fc888c83b3a5c842bde2b3bc45701f1, type: 2}
+  rigid: {fileID: 1933970786}
 --- !u!50 &1933970786
 Rigidbody2D:
   serializedVersion: 5

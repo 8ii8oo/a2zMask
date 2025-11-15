@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -75,7 +76,7 @@ public class GameManager : MonoBehaviour
 
 
 
-    
+
     public void OnClickReturn()
     {
         if (CTSA == true)
@@ -94,6 +95,12 @@ public class GameManager : MonoBehaviour
         {
             Resume();
         }
+    }
+    
+    public void OnClickTitle()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("title");
     }
      
 }
