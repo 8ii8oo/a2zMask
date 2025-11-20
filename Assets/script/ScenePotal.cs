@@ -23,7 +23,7 @@ public class ScenePotal : MonoBehaviour
 
         if (filterRD != null)
         {
-            filterRD.material.SetFloat(speedPropName, 0f);
+            filterRD.sharedMaterial.SetFloat(speedPropName, 0f);
             filterRD.material.SetFloat(scalePropName, 0f);
         }
 
@@ -84,8 +84,8 @@ public class ScenePotal : MonoBehaviour
 
             if (filterRD != null)
             {
-                filterRD.material.SetFloat(speedPropName, currentSpeed);
-                filterRD.material.SetFloat(scalePropName, currentScale);
+                filterRD.sharedMaterial.SetFloat(speedPropName, currentSpeed);
+                filterRD.sharedMaterial.SetFloat(scalePropName, currentScale);
             }
 
             elapsedTime += Time.deltaTime;
@@ -95,8 +95,8 @@ public class ScenePotal : MonoBehaviour
 
         if (filterRD != null)
         {
-            filterRD.material.SetFloat(speedPropName, targetSpeed);
-            filterRD.material.SetFloat(scalePropName, targetScale);
+            filterRD.sharedMaterial.SetFloat(speedPropName, targetSpeed);
+            filterRD.sharedMaterial.SetFloat(scalePropName, targetScale);
         }
 
         SceneManager.LoadScene(sceneName);
@@ -138,8 +138,8 @@ public class ScenePotal : MonoBehaviour
 
                 if (filterRD != null)
                 {
-                    filterRD.material.SetFloat(speedPropName, currentSpeed);
-                    filterRD.material.SetFloat(scalePropName, currentScale);
+                    filterRD.sharedMaterial.SetFloat(speedPropName, currentSpeed);
+                    filterRD.sharedMaterial.SetFloat(scalePropName, currentScale);
                 }
 
                 elapsedTime += Time.deltaTime;
@@ -147,10 +147,10 @@ public class ScenePotal : MonoBehaviour
 
             }
 
-            filterRD.material.SetFloat(speedPropName, targetSpeed);
-            filterRD.material.SetFloat(scalePropName, targetScale);
+            filterRD.sharedMaterial.SetFloat(speedPropName, targetSpeed); 
+            filterRD.sharedMaterial.SetFloat(scalePropName, targetScale); 
 
         }
-    }
+    } 
 }
 

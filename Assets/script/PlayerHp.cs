@@ -50,8 +50,8 @@ public class PlayerHp : MonoBehaviour
         float fadeDuration = 1.5f;
         float timer = 0f;
 
-        Color startColor = new Color(0f, 0f, 0f, 0f);
-        Color endColor = new Color(0f, 0f, 0f, 1f);
+        Color startColor = new Color(255f, 255f, 255f, 0f);
+        Color endColor = new Color(255f, 255f, 255f, 1f);
 
         fadeImage.color = startColor;
 
@@ -66,8 +66,8 @@ public class PlayerHp : MonoBehaviour
         }
         fadeImage.color = endColor;
         Time.timeScale = 0f;
-        returnButton.SetActive(true);
-        gmaeOverImage.SetActive(true);
+        //returnButton.SetActive(true);
+        //gmaeOverImage.SetActive(true);
     }
 
 

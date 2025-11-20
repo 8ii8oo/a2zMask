@@ -11,12 +11,12 @@ public class testSpine : MonoBehaviour
 
     private void Start()
     {
-        spinePlayer.AnimationState.SetAnimation(0, "attack", false);
-        spinePlayer.AnimationState.AddAnimation(0, "idle", true, 0f);
+        //spinePlayer.AnimationState.SetAnimation(0, "skill", false);
+        spinePlayer.AnimationState.AddAnimation(0, "attack", true, 0f);
 
         spinePlayer.AnimationState.End += (entry) =>
         {
-            if (entry.Animation.Name == "idle")
+            if (entry.Animation.Name == "attack")
             {
                 bReady = true;
             }
@@ -40,9 +40,9 @@ public class testSpine : MonoBehaviour
         
 
         // 0번트랙, shoot 애니메이션, 반복재생 안함
-        spinePlayer.AnimationState.SetAnimation(6, "walk", false);
+        spinePlayer.AnimationState.SetAnimation(0, "attack", false);
         // 애니메이션이 끝난 후 다시 idle 애니메이션 재생
-        spinePlayer.AnimationState.AddAnimation(0, "idle", true, 0f);
+        spinePlayer.AnimationState.AddAnimation(0, "attack", true, 0f);
     }
 
     public void ButtonLevelUp()
@@ -54,9 +54,9 @@ public class testSpine : MonoBehaviour
 
 
             // 0번트랙, jump 애니메이션, 반복재생 안함
-            spinePlayer.AnimationState.SetAnimation(0, "walk", false);
+            spinePlayer.AnimationState.SetAnimation(0, "attack", false);
             // 애니메이션이 끝난 후 다시 idle 애니메이션 재생
-            spinePlayer.AnimationState.AddAnimation(0, "idle", true, 0f);
+            spinePlayer.AnimationState.AddAnimation(0, "attack", true, 0f);
     
     }
 
