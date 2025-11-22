@@ -510,7 +510,7 @@ Transform:
   m_GameObject: {fileID: 519420028}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -9, y: -3.07, z: -8.311201}
+  m_LocalPosition: {x: -15.16, y: -3.07, z: -8.311201}
   m_LocalScale: {x: 0.4727033, y: 0.4742502, z: 0.6726}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2696,9 +2696,29 @@ PrefabInstance:
       propertyPath: m_Name
       value: Spine GameObject (player)
       objectReference: {fileID: 0}
+    - target: {fileID: 1672241093042297246, guid: b6082b9d38a637445a34d1ce0298809d, type: 3}
+      propertyPath: m_SortingLayer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1672241093042297246, guid: b6082b9d38a637445a34d1ce0298809d, type: 3}
+      propertyPath: m_SortingOrder
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 1672241093042297246, guid: b6082b9d38a637445a34d1ce0298809d, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4677420002382098197, guid: b6082b9d38a637445a34d1ce0298809d, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4677420002382098197, guid: b6082b9d38a637445a34d1ce0298809d, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.3
+      objectReference: {fileID: 0}
     - target: {fileID: 4677420002382098197, guid: b6082b9d38a637445a34d1ce0298809d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -11.462
+      value: -17.97
       objectReference: {fileID: 0}
     - target: {fileID: 4677420002382098197, guid: b6082b9d38a637445a34d1ce0298809d, type: 3}
       propertyPath: m_LocalPosition.y
