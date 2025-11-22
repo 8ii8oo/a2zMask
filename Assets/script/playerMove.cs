@@ -28,45 +28,24 @@ public class PlayerMove : MonoBehaviour
 
     [Header("컴포넌트 및 상태")]
     public Rigidbody2D rigid;
-    private float moveInput = 0f; // 좌우 입력을 저장할 변수
+    private float moveInput = 0f;
     private bool isFacingRight = true;
 
 
     void Start()
     {
-        
         rigid = GetComponent<Rigidbody2D>();
         if (spinePlayer != null)
         {
-            spinePlayer.AnimationState.SetAnimation(0, "idle", true);
+
+            SetAnimationState("idle"); 
         }
     }
 
     void Update()
     {
 
-        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.LeftArrow))
-        {
-
-            if (!dashing && spinePlayer.AnimationName != "walk")
-            {
-                spinePlayer.AnimationState.SetAnimation(0, "walk", true);
-            }
-        }
         
-        // 키를 떼었을 때
-        if (Input.GetKeyUp(KeyCode.RightArrow) || Input.GetKeyUp(KeyCode.LeftArrow))
-        {
-            if (!Input.GetKey(KeyCode.RightArrow) && !Input.GetKey(KeyCode.LeftArrow))
-            {
-                if (!dashing && spinePlayer.AnimationName != "idle")
-                {
-                    spinePlayer.AnimationState.SetAnimation(0, "idle", true);
-                }
-            }
-        }
-
-
         moveInput = 0f;
         if (Input.GetKey(KeyCode.RightArrow))
         {
@@ -77,26 +56,39 @@ public class PlayerMove : MonoBehaviour
             moveInput = -1f;
         }
 
-        if(Input.GetKeyDown(KeyCode.A)) //기본공격
+
+        if (isGround && !dashing)
+        {
+            if (moveInput != 0f)
+            {
+                SetAnimationState("walk");
+            }
+            else
+            {
+                SetAnimationState("idle");
+            }
+        }
+
+
+
+        if(Input.GetKeyDown(KeyCode.A)) 
         {
             if(!dashing)
             {
-            spinePlayer.AnimationState.SetAnimation(0, "attack", false);
-            
-            
-            if (moveInput != 0 )
+
+                SetAnimationState("attack", false);
+                
+
+                if (moveInput != 0 )
                 {
                     spinePlayer.AnimationState.AddAnimation(0, "walk", true, 0f);
                 }
-                
-            else
+                else
                 {
                     spinePlayer.AnimationState.AddAnimation(0, "idle", true, 0f);
                 }
             }
-
         }
-
 
 
         if (Input.GetKeyDown(KeyCode.Space) && currentJumpCount < maxJumpCount)
@@ -104,11 +96,10 @@ public class PlayerMove : MonoBehaviour
             Jump();
         }
 
-   
+
         if (Input.GetKeyDown(KeyCode.LeftShift) && canDash)
         {
             StartCoroutine(Dash());
-
         }
 
 
@@ -128,15 +119,16 @@ public class PlayerMove : MonoBehaviour
     {
         if (!dashing)
         {
-          
+
             rigid.linearVelocity = new Vector2(moveInput * speed, rigid.linearVelocity.y);
         }
-
     }
 
     void Jump()
     {
 
+        SetAnimationState("jump"); 
+        
         rigid.linearVelocity = new Vector2(rigid.linearVelocity.x, jumpPower);
         currentJumpCount++;
         isGround = false;
@@ -144,6 +136,7 @@ public class PlayerMove : MonoBehaviour
 
     void Flip()
     {
+
         if (isFacingRight && moveInput < 0f || !isFacingRight && moveInput > 0f)
         {
             isFacingRight = !isFacingRight;
@@ -155,19 +148,32 @@ public class PlayerMove : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "floor")
+        if (collision.gameObject.CompareTag("floor")) // CompareTag 사용 권장
         {
+            spinePlayer.AnimationState.SetAnimation(0, "landing", false);
+
             currentJumpCount = 0;
             isGround = true;
-         
+
+
+            if (!dashing)
+            {
+                if(moveInput != 0f)
+                {
+                    SetAnimationState("walk");
+                }
+                else
+                {
+                    SetAnimationState("idle");
+                }
+            }
+
         }
     }
 
     void playerAttack()
     {
-        
-
-        //mask.SetActive(!mask.activeSelf);
+        // mask.SetActive(!mask.activeSelf);
     }
 
     IEnumerator Dash()
@@ -175,7 +181,6 @@ public class PlayerMove : MonoBehaviour
         canDash = false;
         dashing = true;
 
-   
 
         float originalGravity = rigid.gravityScale;
         rigid.gravityScale = 0f;
@@ -185,18 +190,18 @@ public class PlayerMove : MonoBehaviour
 
         yield return new WaitForSeconds(dashTime);
 
-     
+    
         rigid.gravityScale = originalGravity;
-      
+     
         if (moveInput == 0f)
         {
             rigid.linearVelocity = new Vector2(0f, rigid.linearVelocity.y);
-            spinePlayer.AnimationState.SetAnimation(0, "idle", true); // idle로 복귀
+            SetAnimationState("idle"); 
         } 
         else
         {
             rigid.linearVelocity = new Vector2(moveInput * speed, rigid.linearVelocity.y);
-            spinePlayer.AnimationState.SetAnimation(0, "walk", true); 
+            SetAnimationState("walk"); 
         }
 
         dashing = false;
@@ -204,4 +209,13 @@ public class PlayerMove : MonoBehaviour
         yield return new WaitForSeconds(dashingCooldown);
         canDash = true;
     }
+
+    void SetAnimationState(string animName, bool loop = true)
+    {
+        if (spinePlayer != null && spinePlayer.AnimationName != animName)
+        {
+            spinePlayer.AnimationState.SetAnimation(0, animName, loop);
+        }
+    }
+
 }
