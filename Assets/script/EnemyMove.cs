@@ -4,40 +4,51 @@ using Spine.Unity;
 
 public class EnemyMove : MonoBehaviour
 {
-    [SerializeField] private SkeletonAnimation spinePlayer;
-    Rigidbody2D rigid;
+    [SerializeField] public SkeletonAnimation spinePlayer;
+    protected Rigidbody2D rigid;
 
     [Header("== 이동 설정 ==")]
     public float speed = 1f;
-    public int nextMove = 0; 
-    bool isStopping = false;
-    string currentAnim = "";
+    public int nextMove = 1;                // 1: 오른쪽, -1: 왼쪽
+    protected bool isStopping = false;      
+    protected string currentAnim = "";
 
-    [Header("== 공격 설정 ==")]
-    public GameObject BulletPrefab;
-    public float bulletSpeed = 10f; // 총알 속도
-    public float shootingInterval = 3f; // 발사 간격 (초)
-    private bool canShoot = true; // 발사 쿨다운 체크
+    // 자식이 부모 AI를 켜고 끌 수 있게
+    [HideInInspector] public bool isActiveAI = true;
 
-    void Awake()
+    protected virtual void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
 
         if (spinePlayer != null)
         {
             SetAnim("idle");
-            spinePlayer.skeleton.ScaleX = 1; 
         }
+        
+        // ⭐ 배회 로직: 3초마다 Think 함수 호출
+        InvokeRepeating(nameof(Think), 1f, 3f);
+    }
+    
+    // ⭐ 배회 로직: nextMove를 랜덤하게 변경
+    protected virtual void Think()
+    {
+        if (!isActiveAI) return;
+        if (isStopping) return;
 
-        InvokeRepeating("think", 1f, 3f); 
+        int[] moves = { -1, 1 };
+        nextMove = moves[Random.Range(0, moves.Length)];
     }
 
-    void FixedUpdate()
+    protected virtual void FixedUpdate()
     {
+        // 부모 AI가 비활성화 되어있다면 이동/애니 제어를 하지 않음.
+        if (!isActiveAI) return;
+
+        // 실제 이동 및 애니메이션 설정
         if (!isStopping)
         {
+            // 걷는 애니메이션은 나오지만 걷지 않던 문제의 핵심: nextMove에 따른 이동 적용
             rigid.linearVelocity = new Vector2(nextMove * speed, rigid.linearVelocity.y);
-
             if (nextMove != 0)
                 SetAnim("walk");
         }
@@ -47,27 +58,24 @@ public class EnemyMove : MonoBehaviour
             SetAnim("idle");
         }
 
-        if (nextMove != 0)
+        // ⭐ 걷는 방향(nextMove)에 따라 스파인 방향(ScaleX) 동기화 (걷기 문제 해결 핵심)
+        if (nextMove != 0 && spinePlayer != null)
         {
-            spinePlayer.skeleton.ScaleX = Mathf.Sign(nextMove * -1); 
+            // nextMove가 1일 때 ScaleX=1, -1일 때 ScaleX=-1이 되도록 설정
+            spinePlayer.skeleton.ScaleX = nextMove; 
         }
 
+        // 낭떠러지 체크 로직
         Vector2 frontVec = new Vector2(rigid.position.x + nextMove * 0.3f, rigid.position.y);
-        Debug.DrawRay(frontVec, Vector3.down, Color.green);
-        RaycastHit2D rayHit = Physics2D.Raycast(frontVec, Vector3.down, 1f, LayerMask.GetMask("Ground"));
+        RaycastHit2D rayHit = Physics2D.Raycast(frontVec, Vector2.down, 1f, LayerMask.GetMask("Ground"));
 
         if (!isStopping && rayHit.collider == null)
         {
             StartCoroutine(StopAndTurn());
         }
-
-        if (canShoot)
-        {
-            ShootBullet();
-        }
     }
 
-    IEnumerator StopAndTurn()
+    protected IEnumerator StopAndTurn()
     {
         isStopping = true;
         SetAnim("idle");
@@ -75,60 +83,15 @@ public class EnemyMove : MonoBehaviour
 
         yield return new WaitForSeconds(1f);
 
-        nextMove *= -1; 
-
+        nextMove *= -1;
         isStopping = false;
     }
 
-    void think()
+    protected void SetAnim(string animName, bool loop = true)
     {
-        if (!isStopping)
+        if (spinePlayer && spinePlayer.AnimationName != animName)
         {
-            int[] moves = { -1, 1 };
-            nextMove = moves[Random.Range(0, moves.Length)];
-        }
-    }
-
-    void ShootBullet()
-    {
-        canShoot = false;
-        
-        float facingDirection = spinePlayer.skeleton.ScaleX;
-        float directionSign = Mathf.Sign(facingDirection); 
-
-        Vector3 spawnPosition = transform.position;
-
-        GameObject bullet = Instantiate(BulletPrefab, spawnPosition, Quaternion.identity);
-        Rigidbody2D bulletRigid = bullet.GetComponent<Rigidbody2D>();
-        
-        if (bulletRigid != null && directionSign != 0)
-        {
-            bulletRigid.linearVelocity = new Vector2(directionSign * bulletSpeed, 0f);
-            
-            bullet.transform.localScale = new Vector3(directionSign * Mathf.Abs(bullet.transform.localScale.x), 
-            bullet.transform.localScale.y, 
-            bullet.transform.localScale.z);
-        }
-        
-        SetAnim("attack"); 
-
-        StartCoroutine(ShootCooldown());
-    }
-
-    IEnumerator ShootCooldown()
-    {
-        yield return new WaitForSeconds(shootingInterval);
-        canShoot = true;
-        
-        if (!isStopping) SetAnim("walk");
-        else SetAnim("idle");
-    }
-
-    void SetAnim(string animName)
-    {
-        if (spinePlayer != null && spinePlayer.AnimationName != animName)
-        {
-            spinePlayer.AnimationState.SetAnimation(0, animName, true);
+            spinePlayer.AnimationState.SetAnimation(0, animName, loop);
             currentAnim = animName;
         }
     }
